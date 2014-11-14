@@ -7,6 +7,8 @@ using namespace std;
 #include <cmath>
 #include <sstream> 
 #include <iostream>
+#include "Ray.h"
+#include "Hit.h"
 
 Scenegraph::Scenegraph()
 {
@@ -186,3 +188,17 @@ void Scenegraph::getLights(stack<glm::mat4>& modelView){
 	root->getLights(lights, modelView);
 }
 
+vector<vector<float>> Scenegraph::raytrace(int w, int h, stack<glm::mat4>& modelView){
+	//He says return an array, but from what Im reading, it should be a 2 dimensional array, could be wrong though
+	vector<vector<float>> arr;
+	for(int i = 0; i<h;i++){
+		for(int j = 0; j<w; j++){
+			//Not sure if we are supposed to pass the pixel or iterate through here?
+			Ray ray;
+			//Probably supposed to do something with the ray here.
+			Hit hit;
+		}
+	}
+	return arr;
+
+}
