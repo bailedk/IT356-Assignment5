@@ -35,6 +35,10 @@ public:
     void initShaderProgram(GLint shaderProgram);
     void draw(stack<glm::mat4>& modelView);
 
+	float turn;
+	float zoom;
+	int camNum;
+	glm::mat4 trackballTransform;
 	Node * cameraNode;
 
 	void addInstance(Object *in)
@@ -42,7 +46,7 @@ public:
 		instances.push_back(in);
 	}
 
-	void addTexture(Texture *tex)
+	void addTexture(Texture* tex)
 	{
 		cout << "Texture " << tex->getName() << " added" << endl;
 		textureMap[tex->getName()] = tex;
@@ -84,13 +88,16 @@ private:
 		mat_diffuseLocation,mat_specularLocation,mat_shininessLocation,texturematrixLocation,textureLocation;
 	void getLights(stack<glm::mat4>& modelView);
 	LightLocation lightLocation[3];
-
+	
 	GLuint programCopy;
 	TransformNode * cabin;
 	TransformNode * chair0;
 	TransformNode * chair1;
 	TransformNode * chair2;
 	TransformNode * chair3;
+
+	glm::mat4 camMove1;
+	glm::mat4 camMove2;
 };
 
 #endif // SCENEGRAPH_H

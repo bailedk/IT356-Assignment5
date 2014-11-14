@@ -76,10 +76,9 @@ public:
     {
         modelView.push(modelView.top());
         modelView.top() = modelView.top() * animation_transform * transform;
-		
+
         if (child!=NULL)
 			child->draw(modelView);
-
         modelView.pop();
     }
 
@@ -100,11 +99,9 @@ public:
 		modelView.push(modelView.top());
         modelView.top() = modelView.top() * animation_transform * transform;
 
-		mv = modelView.top();
-
+        
 		if (child!=NULL)
 			child->drawBB(modelView);
-		
         modelView.pop();
 	}
 
@@ -189,8 +186,10 @@ public:
     }
 	
 	glm::mat4 getTransform() {
-		return mv;
-		//return glm::mat4(1.0f);
+		return transform;
+	}
+	virtual glm::mat4 getCameraTransform(){
+		return animation_transform * getTransform();
 	}
 
 protected:

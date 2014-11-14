@@ -6,7 +6,7 @@
 	<instance name="cone" path="models/cone" />
 	<image name="checkerboard" path="checkerboard.png" />
 	<image name="earthmap" path="earthmap.png" />
-	<image name="white" path="white.png" />
+	<image name="drshesh" path="drshesh.png" />
 	<image name="space" path="hst.jpg" />
 
 	<transform>
@@ -378,13 +378,13 @@
 			<translate>-100 -30 0</translate>
 		</set>
 		
-		<group name="ride" BB="true">
+		<group name="ride">
 			<group>
 				<transform>
 					<set>
 					</set>
 					<group>
-						<transform name="base">
+						<transform name="base" camera="true">
 							<set>
 								<scale>10 2 10 </scale>
 							</set>
@@ -483,54 +483,22 @@
 												<transform name="chair1"  >
 													<set>
 														<!-- Transform Chair 1 -->
-														<rotate>90 0 0 1</rotate>
-														<translate>0 20.5 0</translate>
-														<rotate>-90 0 1 0</rotate>
+														<rotate>180 0 0 1</rotate>
+														<translate>0 20 0</translate>
+
 														
 														
 													</set>
-													
-													<group name="chair" camera="true">
-														<transform name="chair1back">
-															<set>
-																<!-- Transform Chair 1 Back -->
-																<scale>1 5 4</scale> 
-															</set>
-															<object instanceof="box">
-																<material>
-																	<ambient>0 0 1</ambient>
-																	<diffuse>1 0 0</diffuse>
-																	<specular>1 1 1</specular>
-																	<shininess>20</shininess>
-																	<!--the following four will be relevant in ray tracer -->
-																	<absorption>0.5 </absorption>
-																	<reflection>0.1</reflection>
-																	<transparency>0.4</transparency>
-																	<refractive>1.2</refractive>
-																</material>
-															</object>
-														</transform>
-														<transform name="chair1seat">
+														<group>
+															<transform name="pendulum_ride"> <!-- move leg into correct position -->
 															<set>
 
-																<scale>5 2 4</scale>
-																<translate>2 -3.5 0</translate> 
+																<scale>0.1 0.1 0.1</scale>
+																<translate>-10 0 0</translate> 
 															</set>
-															<object instanceof="box" >
-																<material>
-																	<ambient>0 0 1</ambient>
-																	<diffuse>1 0 0</diffuse>
-																	<specular>1 1 1</specular>
-																	<shininess>20</shininess>
-																	<!--the following four will be relevant in ray tracer -->
-																	<absorption>0.5 </absorption>
-																	<reflection>0.1</reflection>
-																	<transparency>0.4</transparency>
-																	<refractive>1.2</refractive>
-																</material>
-															</object>
+															<group copyof="cabin" />			
 														</transform>
-													</group>
+														</group>
 												</transform>
 											</group>
 										</transform>
@@ -580,7 +548,7 @@
 		<set>
 			<scale>1600 1600 1600</scale>
 		</set>
-		<object instanceof="inverted-box" texture="space">
+		<object instanceof="inverted-box" texture="drshesh">
 			<material>
 				<ambient>1 1 1</ambient>
 				<diffuse>1 1 1</diffuse>

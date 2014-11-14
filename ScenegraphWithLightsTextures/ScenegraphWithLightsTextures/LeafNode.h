@@ -56,9 +56,9 @@ public:
 		{
 			 //get the color
            // glm::vec4 color = material.getAmbient();
+			mv = modelView.top();
             //set the color for all vertices to be drawn for this object
             //glUniform3fv(scenegraph->objectColorLocation,1,glm::value_ptr(color));
-			
 			glUniformMatrix4fv(scenegraph->modelviewLocation,1,GL_FALSE,glm::value_ptr(modelView.top()));
 			glUniformMatrix4fv(scenegraph->normalMatrixLocation,1,GL_FALSE,glm::value_ptr(glm::transpose(glm::inverse(modelView.top()))));
 			
@@ -80,10 +80,7 @@ public:
 			}
 
 			a = glGetError();
-			instanceOf->draw();    
-
-			mv = modelView.top();
-
+			instanceOf->draw();        
 			a = glGetError();
 		}
     }
@@ -102,9 +99,6 @@ public:
 			scenegraph->getInstance("box")->draw();        		
 		}
 
-		// experiment to show where light is
-		//glm::mat4 bbTransform;
-
 
 	}
 	
@@ -118,7 +112,6 @@ public:
 		for(int i =0; i<lights.size();i++){
 			Light light = lights[i];
 			glm::vec4 newPos= lights[i].getPosition();
-			//cout<<"new pos: "<<newPos.x<<" "<<newPos.y<<" "<<newPos.z<<" "<<newPos.w<<" "<<endl;
 			light.setPosition(glm::vec3(modelView.top()*lights[i].getPosition()));
 			l.push_back(light);
 		}
@@ -152,9 +145,12 @@ public:
 		texture=tex;
 	}
 
-	glm::mat4 getTransform() {
-		return mv;
-		//return glm::mat4(1.0f);
+	virtual glm::mat4 getCameraTransform(){
+		return glm::mat4(1.0);
+	}
+
+	virtual glm::mat4 getTransform(){
+		return glm::mat4(1.0);
 	}
 	
 protected:

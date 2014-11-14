@@ -36,7 +36,7 @@ double frame_rate;
 bool mousePressed;
 int mouseX,mouseY;
 
-string filename = "test.xml";
+string filename = "ride_combined.xml";
 
 int main(int argc, char *argv[])
 {
@@ -115,9 +115,25 @@ void processEvent(sf::Event event,sf::RenderWindow& window)
 			cout << "Pressed 1" << endl;
 			v.camNum = 0;
 			break;
-		case sf::Keyboard::Num2:
+		case sf::Keyboard::Num2: 
 			cout << "Pressed 2" << endl;
 			v.camNum = 1;
+			break;
+		case sf::Keyboard::Up: 
+			cout << "move in" << endl;
+			v.zoom += 0.05;
+			break;
+		case sf::Keyboard::Down:
+			cout << "move back" << endl;
+			v.zoom -= 0.05;
+			break;
+		case sf::Keyboard::Left:
+			cout << "move left" << endl;
+			v.turn--;
+			break;
+		case sf::Keyboard::Right: 
+			cout << "move right" << endl;
+			v.turn++;
 			break;
 		}
 		break;
@@ -188,7 +204,7 @@ void display(sf::RenderWindow *window)
 	window->popGLStates();
 
 	//set up the background color of the window. This does NOT clear the window. Right now it is (0,0,0) which is black
-	glClearColor(1,1,1,0);
+	glClearColor(0,0,0,0);
 	glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT); //this command actually clears the window.
 	glEnable(GL_DEPTH_TEST);
 	v.draw(); //simply delegate to our view class that has all the data and does all the rendering
