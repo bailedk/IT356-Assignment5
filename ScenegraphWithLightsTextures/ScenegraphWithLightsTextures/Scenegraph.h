@@ -14,6 +14,8 @@ using namespace std;
 #include "Node.h"
 #include "Texture.h"
 #include "Light.h"
+#include "Ray.h"
+#include "Hit.h"
 
 typedef struct
     {
@@ -33,9 +35,10 @@ public:
     ~Scenegraph();
     void makeScenegraph(Node *root);
     void initShaderProgram(GLint shaderProgram);
-	void setFOV(float fov);
     void draw(stack<glm::mat4>& modelView);
 	vector<vector<float>> raytrace(int w, int h, stack<glm::mat4>& modelView);
+	bool raycast(Ray ray, stack<glm::mat4>& modelView, Material& mat);
+	void setFOV(float fov);
 	float turn;
 	float zoom;
 	int camNum;

@@ -190,18 +190,24 @@ void Scenegraph::getLights(stack<glm::mat4>& modelView){
 
 vector<vector<float>> Scenegraph::raytrace(int w, int h, stack<glm::mat4>& modelView){
 	vector<vector<float>> arr;
-	float focalLength = 1.0f/(tan(fov/2));
+
+	//source: http://stackoverflow.com/questions/4427662/whats-the-relationship-between-field-of-view-and-lens-length
+	float focalLength = (h*1.0f)/(tan(fov/2));
 	for(int i = 0; i<h;i++){
 		for(int j = 0; j<w; j++){
-			//Not sure if we are supposed to pass the pixel or iterate through here?
 			Ray ray;
 			ray.setStart(glm::vec4(0,0,0,1));
-			ray.setDirection("Go thataway ray, fly, fly like youve never flown before, until dieing at several points which which we will determine which is closest to know when exactly you have perished");
+			ray.setDirection(glm::normalize(glm::vec4((j-h/2),(i-h/2),-focalLength,0)));
 			Hit hit;
 		}
 	}
 	return arr;
 
+}
+
+bool Scenegraph::raycast(Ray ray, stack<glm::mat4>& modelView, Material& mat){
+	bool isHit;
+	return isHit;
 }
 
 void Scenegraph::setFOV(float fieldOfView){
