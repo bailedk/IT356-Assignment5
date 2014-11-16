@@ -33,6 +33,7 @@ public:
     ~Scenegraph();
     void makeScenegraph(Node *root);
     void initShaderProgram(GLint shaderProgram);
+	void setFOV(float fov);
     void draw(stack<glm::mat4>& modelView);
 	vector<vector<float>> raytrace(int w, int h, stack<glm::mat4>& modelView);
 	float turn;
@@ -88,7 +89,7 @@ private:
 		mat_diffuseLocation,mat_specularLocation,mat_shininessLocation,texturematrixLocation,textureLocation;
 	void getLights(stack<glm::mat4>& modelView);
 	LightLocation lightLocation[3];
-
+	float fov;
 	
 	GLuint programCopy;
 	TransformNode * cabin;

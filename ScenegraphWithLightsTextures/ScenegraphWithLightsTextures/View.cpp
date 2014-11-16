@@ -49,7 +49,8 @@ void View::resize(int w, int h)
         proj.pop();
 
 	//proj.push(glm::ortho(-200.0f,200.0f,-200.0f*WINDOW_HEIGHT/WINDOW_WIDTH,200.0f*WINDOW_HEIGHT/WINDOW_WIDTH,0.1f,10000.0f));
-    proj.push(glm::perspective(120.0f*3.14159f/180,(float)WINDOW_WIDTH/WINDOW_HEIGHT,0.1f,10000.0f));
+	fov = 120.0f*3.14159f/180;
+    proj.push(glm::perspective(fov,(float)WINDOW_WIDTH/WINDOW_HEIGHT,0.1f,10000.0f));
 }
 
 void View::openFile(string filename)
@@ -80,7 +81,7 @@ void View::initialize()
 	projectionLocation = glGetUniformLocation(program,"projection");
 
 	sgraph.initShaderProgram(program);
-	
+	sgraph.setFOV(fov);
 	string nPath = "white.png";
 	string nNull = "white";
 	Texture *tex = new Texture();

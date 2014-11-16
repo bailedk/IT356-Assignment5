@@ -73,6 +73,9 @@ protected:
 private:
     //the width and height of the window
     int WINDOW_WIDTH,WINDOW_HEIGHT;
+	//Store the field of view
+	float fov;
+
     //IDs for locating various variables in our shaders
     GLint projectionLocation,modelviewLocation,objectColorLocation;
 

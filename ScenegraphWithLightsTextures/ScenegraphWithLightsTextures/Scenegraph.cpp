@@ -189,16 +189,21 @@ void Scenegraph::getLights(stack<glm::mat4>& modelView){
 }
 
 vector<vector<float>> Scenegraph::raytrace(int w, int h, stack<glm::mat4>& modelView){
-	//He says return an array, but from what Im reading, it should be a 2 dimensional array, could be wrong though
 	vector<vector<float>> arr;
+	float focalLength = 1.0f/(tan(fov/2));
 	for(int i = 0; i<h;i++){
 		for(int j = 0; j<w; j++){
 			//Not sure if we are supposed to pass the pixel or iterate through here?
 			Ray ray;
-			//Probably supposed to do something with the ray here.
+			ray.setStart(glm::vec4(0,0,0,1));
+			ray.setDirection("Go thataway ray, fly, fly like youve never flown before, until dieing at several points which which we will determine which is closest to know when exactly you have perished");
 			Hit hit;
 		}
 	}
 	return arr;
 
+}
+
+void Scenegraph::setFOV(float fieldOfView){
+		fov = fieldOfView;
 }
