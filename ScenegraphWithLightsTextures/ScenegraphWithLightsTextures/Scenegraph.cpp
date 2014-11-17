@@ -189,25 +189,56 @@ void Scenegraph::getLights(stack<glm::mat4>& modelView){
 }
 
 vector<vector<float>> Scenegraph::raytrace(int w, int h, stack<glm::mat4>& modelView){
+	// don't think you really need to have this arr but whatevs
 	vector<vector<float>> arr;
+
+	// Create the image
+	image.create(w,h);
+
+	cout << "Starting raytrace" << endl;
 
 	//source: http://stackoverflow.com/questions/4427662/whats-the-relationship-between-field-of-view-and-lens-length
 	float focalLength = (h/2*1.0f)/(tan(fov/2));
+
+	cout << "fov " << fov << endl;
+	cout << "fieldofview " << focalLength << endl;
+
 	for(int i = 0; i<h;i++){
 		for(int j = 0; j<w; j++){
+			
 			Ray ray;
 			ray.setStart(glm::vec4(0,0,0,1));
 			ray.setDirection(glm::normalize(glm::vec4((j-h/2),(h/2-i),-focalLength,0)));
+
+			if(raycast(ray, modelView, color)) {
+				image.setPixel(j,i,color.White);
+				//cout << "white" << endl;
+			}
+			else {
+				image.setPixel(j,i,color.Blue);
+				//cout << "black" << endl;
+			}
 		}
 	}
+
+	image.saveToFile("raytrace.png");
+
 	return arr;
 
 }
 
-bool Scenegraph::raycast(Ray ray, stack<glm::mat4>& modelView, Material& mat){
+//bool Scenegraph::raycast(Ray ray, stack<glm::mat4>& modelView, Material& mat, sf::Color& color){
+bool Scenegraph::raycast(Ray ray, stack<glm::mat4>& modelView, sf::Color& color){
 	bool isHit = false;
 	Hit hit;
 	isHit=root->intersect(ray,hit,modelView); 
+
+	if(isHit) {
+		// color = shade(.....)
+		// lots of other stuff for reflection, transparency, refract etc...
+		// todo later
+	}
+
 	return isHit;
 }
 

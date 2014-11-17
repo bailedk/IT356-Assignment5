@@ -3,16 +3,27 @@
 	<instance name="box" path="models/box" />
 	<instance name="cylinder" path="models/cylinder" />
 	<instance name="cone" path="models/cone" />
+					
+	<light>
+		<ambient>0.8 0.8 0.8</ambient>
+		<diffuse>0.8 0.8 0.8</diffuse>
+		<specular>0.8 0.8 0.8</specular>
+		<position>0 50 0</position>
+		<direction>0 1 0 </direction>
+		<spotangle>90</spotangle>
+		<spotdirection>1 0 0 </spotdirection>
+	</light> 
+	
 	<transform>
 			<set>
 				<scale>20 20 20</scale>					
 			</set>
-			<object instanceof="cylinder">
+			<object instanceof="sphere">
 				<material>
 					<ambient>0 1 0</ambient>
 					<diffuse>1 0 0</diffuse>
 					<specular>1 0 0</specular>
-					<shininess>10</shininess>
+					<shininess>100</shininess>
 					<!--the following four will be relevant in ray tracer -->
 					<absorption>0.5 </absorption>
 					<reflection>0.1</reflection>
@@ -20,16 +31,7 @@
 					<refractive>1.2</refractive>
 				</material>
 				<!-- light added to object node -->
-				
-				<light>
-					<ambient>0.8 0.8 0.8</ambient>
-					<diffuse>0.8 0.8 0.8</diffuse>
-					<specular>0.8 0.8 0.8</specular>
-					<position>100 100 100 </position>
-					<direction>0 1 0 </direction>
-					<spotangle>90</spotangle>
-					<spotdirection>1 0 0 </spotdirection>
-				</light> 
+
 			</object>			
 							
 	</transform>

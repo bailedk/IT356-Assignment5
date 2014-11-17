@@ -143,7 +143,7 @@ private:
 
 				// TODO REMEMBER TO ADD THIS IN OTHER PLACES NEEDED
 				if(node->first_attribute("camera")!=NULL) {
-						cout << "camera here" << endl;
+						//cout << "camera here" << endl;
 						// TODO ADD TEST FOR ATTRIBUTE VALUE
 						camDraw = true;
 				}
@@ -212,7 +212,7 @@ private:
 
 				// TODO REMEMBER TO ADD THIS IN OTHER PLACES NEEDED
 				if(node->first_attribute("camera")!=NULL) {
-						cout << "camera here" << endl;
+						//cout << "camera here" << endl;
 						// TODO ADD TEST FOR ATTRIBUTE VALUE
 						camDraw = true;
 				}
@@ -306,7 +306,7 @@ private:
 					return NULL;
 				}
 
-				cout << path << endl;
+				//cout << path << endl;
 				//create texture
 				Texture *tex = new Texture();
 				tex->createImage(path);
@@ -344,7 +344,7 @@ private:
 		if (node->first_attribute("name")!=NULL)
 		{
 			name = node->first_attribute("name")->value();
-			cout << "name " << name << endl;
+			//cout << "name " << name << endl;
 		}
 		else
 		{
@@ -362,7 +362,7 @@ private:
 		
 		// TODO REMEMBER TO ADD THIS IN OTHER PLACES NEEDED
 		if(node->first_attribute("camera")!=NULL) {
-				cout << "camera here" << endl;
+				//cout << "camera here" << endl;
 				// TODO ADD TEST FOR ATTRIBUTE VALUE
 				camDraw = true;
 		}
@@ -604,7 +604,7 @@ private:
 
 					// TODO REMEMBER TO ADD THIS IN OTHER PLACES NEEDED
 					if(start->first_attribute("camera")!=NULL) {
-							cout << "camera here" << endl;
+							//cout << "camera here" << endl;
 							// TODO ADD TEST FOR ATTRIBUTE VALUE
 							camDraw = true;
 					}

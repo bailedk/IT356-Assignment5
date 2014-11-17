@@ -79,7 +79,7 @@ public:
 
 	void setCamDraw(bool c) {
 		camDraw = c;
-		cout << "CAM DRAW!! " << endl;
+		//cout << "CAM DRAW!! " << endl;
 	}
 
 	glm::vec3 getMinBounds()
@@ -94,7 +94,7 @@ public:
 
 	void addLight(const Light& l)
 	{
-		cout << "Light added in node " << name << endl;
+		//cout << "Light added in node " << name << endl;
 		lights.push_back(l);
 	}
 	

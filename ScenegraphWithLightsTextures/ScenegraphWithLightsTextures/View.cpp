@@ -23,6 +23,7 @@ View::View()
 	camNum = 0;
 	zoom = 0.0;
 	turn = 0.0;
+	raytraceImg = true;
 }
 
 View::~View()
@@ -116,7 +117,7 @@ void View::draw()
 	glm::mat4 camMove2 = glm::scale(glm::mat4(1.0f), glm::vec3(zoom+1, zoom+1, zoom+1)) * glm::rotate(glm::mat4(1.0f),glm::radians(turn*1.0f),glm::vec3(1,0,0)) * glm::translate(glm::mat4(1.0f), glm::vec3(0,0,0));
 
 	if(camNum == 0) {
-	modelview.top() = modelview.top() * glm::lookAt(glm::vec3(0,150,0),glm::vec3(0,0,0),glm::vec3(1,0,0)) * camMove1 * trackballTransform;
+	modelview.top() = modelview.top() * glm::lookAt(glm::vec3(0,50,0),glm::vec3(0,0,0),glm::vec3(1,0,0)) * camMove1 * trackballTransform;
 	}
 	else if(camNum == 1) {
 		modelview.pop();
@@ -158,6 +159,14 @@ void View::draw()
      */
 	a = glGetError();
     glPolygonMode(GL_FRONT_AND_BACK,GL_LINES);
+
+	// raytrace, eventually let this be called when the user presses a key(?)
+	if(raytraceImg) {
+		cout << "raytrace" << endl;
+		sgraph.raytrace(400,400, modelview);
+		raytraceImg = false;
+	}
+
     sgraph.draw(modelview);
 	a = glGetError();
     glFinish();

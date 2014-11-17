@@ -141,7 +141,7 @@ public:
 
 	void setTexture(Texture *tex)
 	{
-		cout << "Texture set to " << tex->getName() << endl;
+		//cout << "Texture set to " << tex->getName() << endl;
 		texture=tex;
 	}
 
@@ -153,6 +153,7 @@ public:
 		return glm::mat4(1.0);
 	}
 	virtual bool intersect(Ray ray, Hit& hit,stack<glm::mat4>& modelView){
+		//cout << "intersect in leaf" << endl;
 		bool hasHit = true;
 		ray.setDirection(ray.getDirection()*glm::inverse(modelView.top()));
 		ray.setStart(ray.getStart()*glm::inverse(modelView.top()));

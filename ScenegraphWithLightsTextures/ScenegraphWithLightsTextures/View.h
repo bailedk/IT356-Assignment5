@@ -94,6 +94,8 @@ private:
     glm::vec2 prev_mouse;
 	GLuint program;
 
+	bool raytraceImg;
+
 };
 
 #endif // VIEW_H

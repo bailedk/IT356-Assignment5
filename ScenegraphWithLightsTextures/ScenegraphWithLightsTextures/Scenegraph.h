@@ -37,7 +37,7 @@ public:
     void initShaderProgram(GLint shaderProgram);
     void draw(stack<glm::mat4>& modelView);
 	vector<vector<float>> raytrace(int w, int h, stack<glm::mat4>& modelView);
-	bool raycast(Ray ray, stack<glm::mat4>& modelView, Material& mat);
+	bool raycast(Ray ray, stack<glm::mat4>& modelView, sf::Color& color);
 	void setFOV(float fov);
 	float turn;
 	float zoom;
@@ -52,7 +52,7 @@ public:
 
 	void addTexture(Texture* tex)
 	{
-		cout << "Texture " << tex->getName() << " added" << endl;
+		//cout << "Texture " << tex->getName() << " added" << endl;
 		textureMap[tex->getName()] = tex;
 	}
 
@@ -80,7 +80,7 @@ public:
 	
 	Texture *getTexture(string name)
 	{
-		cout << "Texture " << name << " looked up" << endl;
+		//cout << "Texture " << name << " looked up" << endl;
 		return textureMap[name];
 	}
 private:
@@ -103,6 +103,9 @@ private:
 
 	glm::mat4 camMove1;
 	glm::mat4 camMove2;
+
+	sf::Image image;
+	sf::Color color;
 };
 
 #endif // SCENEGRAPH_H
