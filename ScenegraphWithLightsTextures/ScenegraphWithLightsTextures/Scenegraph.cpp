@@ -192,13 +192,12 @@ vector<vector<float>> Scenegraph::raytrace(int w, int h, stack<glm::mat4>& model
 	vector<vector<float>> arr;
 
 	//source: http://stackoverflow.com/questions/4427662/whats-the-relationship-between-field-of-view-and-lens-length
-	float focalLength = (h*1.0f)/(tan(fov/2));
+	float focalLength = (h/2*1.0f)/(tan(fov/2));
 	for(int i = 0; i<h;i++){
 		for(int j = 0; j<w; j++){
 			Ray ray;
 			ray.setStart(glm::vec4(0,0,0,1));
-			ray.setDirection(glm::normalize(glm::vec4((j-h/2),(i-h/2),-focalLength,0)));
-			Hit hit;
+			ray.setDirection(glm::normalize(glm::vec4((j-h/2),(h/2-i),-focalLength,0)));
 		}
 	}
 	return arr;
@@ -206,7 +205,9 @@ vector<vector<float>> Scenegraph::raytrace(int w, int h, stack<glm::mat4>& model
 }
 
 bool Scenegraph::raycast(Ray ray, stack<glm::mat4>& modelView, Material& mat){
-	bool isHit;
+	bool isHit = false;
+	Hit hit;
+	isHit=root->intersect(ray,hit,modelView); 
 	return isHit;
 }
 

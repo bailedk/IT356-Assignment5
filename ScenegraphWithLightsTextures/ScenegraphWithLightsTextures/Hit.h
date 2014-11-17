@@ -36,6 +36,14 @@ public:
 
     }
 
+	void setMat(Material material){
+		mat=material;
+	}
+
+	Material getMat(){
+		return mat;
+	}
+
 protected:
 	// woop
 	

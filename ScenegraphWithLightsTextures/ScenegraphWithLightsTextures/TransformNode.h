@@ -193,7 +193,10 @@ public:
 	}
 	virtual bool intersect(Ray ray, Hit& hit,stack<glm::mat4>& modelView){
 		bool hasHit = false;
+		modelView.push(modelView.top());
+		modelView.top() = modelView.top() * animation_transform * transform;
 		hasHit = child->intersect(ray, hit, modelView);
+		modelView.pop();
 		return hasHit;
 	}
 
