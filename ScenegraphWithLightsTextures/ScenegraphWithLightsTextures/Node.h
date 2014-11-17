@@ -7,6 +7,8 @@
 #include <iostream>
 using namespace std;
 #include "Light.h"
+#include "Ray.h"
+#include "Hit.h"
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 #include <glm/glm.hpp>
@@ -55,7 +57,7 @@ public:
 	virtual Node *clone()=0;
 	virtual void getLights(vector<Light>& l,stack<glm::mat4>& modelView)=0;
 	virtual glm::mat4 getCameraTransform()=0;
-	virtual bool intersect(Ray ray, Hit& hit,stack<glm::mat4>& modelView) = 0;
+	virtual bool intersect(Ray ray, Hit& hit,stack<glm::mat4>& modelView)=0;
 	void setParent(Node *parent)
 	{
 		this->parent = parent;
