@@ -39,11 +39,15 @@ public:
 	void setMat(Material material){
 		mat=material;
 	}
-
 	Material getMat(){
 		return mat;
 	}
-
+	void setT(float time){
+		t = time;
+	}
+	float getT(){
+		return t;
+	}
 protected:
 	// woop
 	

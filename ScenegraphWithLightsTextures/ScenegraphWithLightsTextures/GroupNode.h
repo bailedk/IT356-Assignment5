@@ -154,7 +154,9 @@ public:
 	virtual bool intersect(Ray ray, Hit& hit,stack<glm::mat4>& modelView){
 		bool hasHit = false;
 		for(int i =0; i<children.size(); i++){
-			hasHit = children[i]->intersect(ray, hit, modelView);
+			if(children[i]->intersect(ray, hit, modelView)){
+				hasHit=true;
+			}
 		}
 		return hasHit;
 	}
