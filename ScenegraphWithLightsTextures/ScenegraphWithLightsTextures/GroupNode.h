@@ -151,6 +151,13 @@ public:
 	virtual glm::mat4 getTransform(){
 		return glm::mat4(1.0);
 	}
+	virtual bool intersect(Ray ray, Hit& hit,stack<glm::mat4>& modelView){
+		bool hasHit = false;
+		for(int i =0; i<children.size(); i++){
+			hasHit = children[i]->intersect(ray, hit, modelView);
+		}
+		return hasHit;
+	}
 
 	
 };

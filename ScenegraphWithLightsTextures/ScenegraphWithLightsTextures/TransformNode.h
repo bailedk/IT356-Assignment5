@@ -191,6 +191,11 @@ public:
 	virtual glm::mat4 getCameraTransform(){
 		return animation_transform * getTransform();
 	}
+	virtual bool intersect(Ray ray, Hit& hit,stack<glm::mat4>& modelView){
+		bool hasHit = false;
+		hasHit = child->intersect(ray, hit, modelView);
+		return hasHit;
+	}
 
 protected:
 	glm::mat4 transform,animation_transform;

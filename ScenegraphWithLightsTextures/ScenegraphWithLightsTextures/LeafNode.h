@@ -152,6 +152,13 @@ public:
 	virtual glm::mat4 getTransform(){
 		return glm::mat4(1.0);
 	}
+	virtual bool intersect(Ray ray, Hit& hit,stack<glm::mat4>& modelView){
+		bool hasHit = false;
+		if(instanceOf->getName().compare("sphere") ==0){
+			//This is probably hard, so it will likely get done later
+		}
+		return hasHit;
+	}
 	
 protected:
 	Object *instanceOf;

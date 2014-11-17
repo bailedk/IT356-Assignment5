@@ -55,6 +55,7 @@ public:
 	virtual Node *clone()=0;
 	virtual void getLights(vector<Light>& l,stack<glm::mat4>& modelView)=0;
 	virtual glm::mat4 getCameraTransform()=0;
+	virtual bool intersect(Ray ray, Hit& hit,stack<glm::mat4>& modelView) = 0;
 	void setParent(Node *parent)
 	{
 		this->parent = parent;
