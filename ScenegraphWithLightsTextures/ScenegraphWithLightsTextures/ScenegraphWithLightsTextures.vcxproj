@@ -80,6 +80,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="GroupNode.h" />
+    <ClInclude Include="Hit.h" />
     <ClInclude Include="LeafNode.h" />
     <ClInclude Include="Light.h" />
     <ClInclude Include="Material.h" />
@@ -88,6 +89,7 @@
     <ClInclude Include="ObjectXMLReader.h" />
     <ClInclude Include="OBJExporter.h" />
     <ClInclude Include="OBJImporter.h" />
+    <ClInclude Include="Ray.h" />
     <ClInclude Include="Scenegraph.h" />
     <ClInclude Include="SceneXMLReader.h" />
     <ClInclude Include="Texture.h" />

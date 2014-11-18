@@ -208,7 +208,8 @@ vector<vector<float>> Scenegraph::raytrace(int w, int h, stack<glm::mat4>& model
 			
 			Ray ray;
 			ray.setStart(glm::vec4(0,0,0,1));
-			ray.setDirection(glm::normalize(glm::vec4((j-h/2),(h/2-i),-focalLength,0)));
+			//ray.setDirection(glm::normalize(glm::vec4((j-h/2),(h/2-i),-focalLength,0)));
+			ray.setDirection(glm::normalize(glm::vec4((j-w/2),(i-h/2),-focalLength,0)));
 
 			if(raycast(ray, modelView, color)) {
 				image.setPixel(j,i,color.White);

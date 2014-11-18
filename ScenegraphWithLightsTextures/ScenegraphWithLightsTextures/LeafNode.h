@@ -154,22 +154,27 @@ public:
 	}
 	virtual bool intersect(Ray ray, Hit& hit,stack<glm::mat4>& modelView){
 		//cout << "intersect in leaf" << endl;
-		bool hasHit = true;
-		ray.setDirection(ray.getDirection()*glm::inverse(modelView.top()));
-		ray.setStart(ray.getStart()*glm::inverse(modelView.top()));
+		bool hasHit = false;
+
+		//ray.setDirection(ray.getDirection()*glm::inverse(modelView.top()));
+		ray.setDirection(glm::inverse(modelView.top()) * ray.getDirection());
+
+		//ray.setStart(ray.getStart()*glm::inverse(modelView.top()));
+		ray.setStart(glm::inverse(modelView.top())*ray.getStart());
+
 		glm::vec4 dir = ray.getDirection();
 		glm::vec4 start = ray.getStart();
 		if(instanceOf->getName().compare("sphere") ==0){
-			float a = dir.x * dir.x + dir.y +dir.y +dir.z *dir.z;
+			float a = dir.x * dir.x + dir.y * dir.y + dir.z *dir.z;
 			float b = (2*dir.x*start.x)+(2*dir.y*start.y)+(2*dir.z*start.z);
 			float c = start.x*start.x+start.y*start.y+start.z*start.z-1.0f;
 			float iTest = b*b-4*a*c;
-			if(iTest<0){
+			if(iTest<0) {
 				return false;
-			}else{
-				float tPos = (b+sqrt(iTest))/(2*a);
-				float tNeg = (b-sqrt(iTest))/(2*a);
-				if(tPos>=0&&tPos<tNeg&&tPos<hit.getT()){
+			} else {
+				float tPos = (-b+sqrt(iTest))/(2*a);
+				float tNeg = (-b-sqrt(iTest))/(2*a);
+				if(tPos >= 0 && tPos < tNeg && tPos < hit.getT()){
 					hit.setT(tPos);
 				}else{
 					if(tNeg<hit.getT()){
