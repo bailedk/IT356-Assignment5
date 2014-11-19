@@ -212,11 +212,11 @@ vector<vector<float>> Scenegraph::raytrace(int w, int h, stack<glm::mat4>& model
 			ray.setDirection(glm::normalize(glm::vec4((j-w/2),(h/2-i),-focalLength,0)));
 
 			if(raycast(ray, modelView, color)) {
-				image.setPixel(j,i,color.White);
+				image.setPixel(j,i,color);
 				//cout << "white" << endl;
 			}
 			else {
-				image.setPixel(j,i,color.Blue);
+				image.setPixel(j,i,color);
 				//cout << "black" << endl;
 			}
 		}
@@ -235,9 +235,13 @@ bool Scenegraph::raycast(Ray ray, stack<glm::mat4>& modelView, sf::Color& color)
 	isHit=root->intersect(ray,hit,modelView); 
 
 	if(isHit) {
-		// color = shade(.....)
+		// color = shade()
 		// lots of other stuff for reflection, transparency, refract etc...
 		// todo later
+		color = color.White;
+	}
+	else {
+		color = color.Black;
 	}
 
 	return isHit;
