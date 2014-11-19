@@ -7,6 +7,7 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include "Texture.h"
 #include "Light.h"
+#include <algorithm>
 
 
 class LeafNode : public Node
@@ -164,7 +165,8 @@ public:
 
 		glm::vec4 dir = ray.getDirection();
 		glm::vec4 start = ray.getStart();
-		if(instanceOf->getName().compare("sphere") ==0){
+
+		if(instanceOf->getName().compare("sphere") ==0) {
 			float a = dir.x * dir.x + dir.y * dir.y + dir.z *dir.z;
 			float b = (2*dir.x*start.x)+(2*dir.y*start.y)+(2*dir.z*start.z);
 			float c = start.x*start.x+start.y*start.y+start.z*start.z-1.0f;
@@ -185,7 +187,86 @@ public:
 				return true;
 			}
 		}
-		return hasHit;
+		else if(instanceOf->getName().compare("box") == 0) {
+			float tNear = FLT_MAX * -1;
+			float tFar = FLT_MAX;
+
+			// Uses Kay and Kayjia "Slab" Method found below
+			// https://www.siggraph.org/education/materials/HyperGraph/raytrace/rtinter3.htm
+
+			// x
+			if (dir.x != 0.0) {
+				float tx1 = (-0.5 - start.x)/dir.x;
+				float tx2 = (0.5 - start.x)/dir.x;
+ 
+				if(tx1 > tx2) {
+					float temp;
+					temp = tx1;
+					tx1 = tx2;
+					tx2 = temp;
+				}
+			
+				if(tx1 > tNear) {
+					tNear = tx1;
+				}
+
+				if(tx2 < tFar) {
+					tFar = tx2;
+				}
+
+			}
+ 
+			// y
+			if (dir.y != 0.0) {
+				float ty1 = (-0.5 - start.y)/dir.y;
+				float ty2 = (0.5 - start.y)/dir.y;
+
+				if(ty1 > ty2) {
+					float temp;
+					temp = ty1;
+					ty1 = ty2;
+					ty2 = temp;
+				}
+			
+				if(ty1 > tNear) {
+					tNear = ty1;
+				}
+
+				if(ty2 < tFar) {
+					tFar = ty2;
+				}
+ 
+			}
+
+			// z
+			if (dir.z != 0.0) {
+				float tz1 = (-0.5 - start.z)/dir.z;
+				float tz2 = (0.5 - start.z)/dir.z;
+
+				if(tz1 > tz2) {
+					float temp;
+					temp = tz1;
+					tz1 = tz1;
+					tz2 = temp;
+				}
+			
+				if(tz1 > tNear) {
+					tNear = tz1;
+				}
+
+				if(tz2 < tFar) {
+					tFar = tz2;
+				}
+
+			}
+ 
+			// i think there needs to be an extra check here, but won't be able to be sure until shade works
+			return tFar >= tNear;
+
+		}
+
+		// if it's not an object we have just give a no-hit
+		return false;
 	}
 	
 protected:
