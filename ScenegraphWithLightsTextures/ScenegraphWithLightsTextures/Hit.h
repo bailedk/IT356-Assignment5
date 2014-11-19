@@ -39,6 +39,12 @@ public:
 	void setMat(Material material){
 		mat=material;
 	}
+	void setIntersection(glm::vec4 intersectIn) {
+		intersect = intersectIn;
+	}
+	void setNormal(glm::vec4 normalIn) {
+		normal = normalIn;
+	}
 	Material getMat(){
 		return mat;
 	}

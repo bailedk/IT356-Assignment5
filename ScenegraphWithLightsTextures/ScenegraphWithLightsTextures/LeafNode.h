@@ -176,20 +176,26 @@ public:
 			} else {
 				float tPos = (-b+sqrt(iTest))/(2*a);
 				float tNeg = (-b-sqrt(iTest))/(2*a);
+				// SETTING NORMALS/POINTS 
 				if(tPos >= 0 && tPos < tNeg && tPos < hit.getT()){
 					hit.setT(tPos);
-				}else{
+				// not sure this is right
+				}else {
 					if(tNeg<hit.getT()){
 						hit.setT(tNeg);
 					}
 				}
+				
 				hit.setMat(material);
 				return true;
 			}
 		}
+		// Need to add hit record stuff
 		else if(instanceOf->getName().compare("box") == 0) {
 			float tNear = FLT_MAX * -1;
 			float tFar = FLT_MAX;
+
+			hit.setMat(material);
 
 			// Uses Kay and Kayjia "Slab" Method found below
 			// https://www.siggraph.org/education/materials/HyperGraph/raytrace/rtinter3.htm
@@ -261,6 +267,13 @@ public:
 			}
  
 			// i think there needs to be an extra check here, but won't be able to be sure until shade works
+			if(tFar >= tNear) {
+				hit.setT(tFar);
+			}
+			else {
+				hit.setT(tNear);
+			}
+
 			return tFar >= tNear;
 
 		}

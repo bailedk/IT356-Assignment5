@@ -1,6 +1,5 @@
 #include "Scenegraph.h"
 #include <stack>
-
 #include "TransformNode.h"
 using namespace std;
 #include <glm/gtc/matrix_transform.hpp>
@@ -9,6 +8,7 @@ using namespace std;
 #include <iostream>
 #include "Ray.h"
 #include "Hit.h"
+#include <algorithm>
 
 Scenegraph::Scenegraph()
 {
@@ -235,16 +235,158 @@ bool Scenegraph::raycast(Ray ray, stack<glm::mat4>& modelView, sf::Color& color)
 	isHit=root->intersect(ray,hit,modelView); 
 
 	if(isHit) {
-		// color = shade()
+		color = shade(hit.intersect, lights, hit.normal, hit.getMat());
+		hit;
+		//cout << "hit set color "  << endl;
 		// lots of other stuff for reflection, transparency, refract etc...
 		// todo later
-		color = color.White;
+		//color = color.White;
 	}
 	else {
 		color = color.Black;
 	}
 
 	return isHit;
+}
+
+sf::Color Scenegraph::shade(glm::vec4 pt, vector<Light>& lights, glm::vec4 normal, Material& mat) {
+
+	/*
+	#version 400 core
+
+	struct MaterialProperties
+	{
+		vec3 ambient;
+		vec3 diffuse;
+		vec3 specular;
+		float shininess;
+	};
+
+	struct LightProperties
+	{
+		vec3 ambient;
+		vec3 diffuse;
+		vec3 specular;
+		vec4 position;
+	};
+
+
+	in vec3 fNormal;
+	in vec4 fPosition;
+
+	in vec4 fTexCoord;
+
+	const int MAXLIGHTS = 10;
+
+	uniform MaterialProperties material;
+	uniform LightProperties light[MAXLIGHTS];
+	uniform int numLights;
+
+	uniform sampler2D image;
+
+	out vec4 fColor;
+
+	void main()
+	{
+		vec3 lightVec,viewVec,reflectVec;
+		vec3 normalView;
+		vec3 ambient,diffuse,specular;
+		float nDotL,rDotV;
+
+
+		fColor = vec4(0,0,0,1);
+
+		for (int i=0;i<numLights;i++)
+		{
+			if (light[i].position.w!=0)
+				lightVec = normalize(light[i].position.xyz - fPosition.xyz);
+			else
+				lightVec = normalize(-light[i].position.xyz);
+
+			vec3 tNormal = fNormal;
+			normalView = normalize(tNormal.xyz);
+			nDotL = dot(normalView,lightVec);
+
+			viewVec = -fPosition.xyz;
+			viewVec = normalize(viewVec);
+
+			reflectVec = reflect(-lightVec,normalView);
+			reflectVec = normalize(reflectVec);
+
+			rDotV = max(dot(reflectVec,viewVec),0.0);
+
+			ambient = material.ambient * light[i].ambient;
+			diffuse = material.diffuse * light[i].diffuse * max(nDotL,0);
+			if (nDotL>0)
+				specular = material.specular * light[i].specular * pow(rDotV,material.shininess);
+			else
+				specular = vec3(0,0,0);
+			fColor = fColor + vec4(ambient+diffuse+specular,1.0);
+		}
+		fColor = fColor * texture2D(image,fTexCoord.st);
+	}
+
+	//////////////////////////
+
+	vec3 lightVec,viewVec,reflectVec;
+    vec3 normalView;
+    vec3 ambient,diffuse,specular;
+    float nDotL,rDotV;
+
+    fPosition = modelview * vec4(vPosition.xyzw);
+    gl_Position = projection * fPosition;
+
+
+    vec4 tNormal = normalmatrix * vNormal;
+    fNormal = normalize(tNormal.xyz);
+
+    fTexCoord = texturematrix * texcoord;
+
+	*/
+
+
+	glm::vec4 colorv = glm::vec4(0,0,0,1);
+
+	glm::vec3 lightVec,viewVec,reflectVec;
+	glm::vec3 normalView;
+	glm::vec3 ambient,diffuse,specular;
+	float nDotL,rDotV;
+
+	for (int i=0;i<lights.size();i++)
+		{
+			if (lights[i].getPosition().w != 0)
+				lightVec = glm::normalize(lights[i].getPosition().xyz()  - pt.xyz());
+			else
+				lightVec = glm::normalize(-lights[i].getPosition().xyz());
+
+			glm::vec3 tNormal = normal.xyz();
+			normalView = glm::normalize(tNormal);
+			nDotL = glm::dot(normalView,lightVec);
+
+			viewVec = -pt.xyz();
+			viewVec = glm::normalize(viewVec);
+
+			reflectVec = glm::reflect(-lightVec,normalView);
+			reflectVec = glm::normalize(reflectVec);
+
+			rDotV = glm::max(glm::dot(reflectVec,viewVec),0.0f);
+
+			ambient = mat.getAmbient().xyz() * lights[i].getAmbient().xyz();
+
+			diffuse = mat.getDiffuse().xyz() * lights[i].getDiffuse().xyz() * glm::max(nDotL,0.0f);
+
+			if (nDotL>0)
+				specular = mat.getSpecular().xyz() * lights[i].getSpecular().xyz() * glm::pow(rDotV,mat.getShininess());
+			else
+				specular = glm::vec3(0,0,0);
+			colorv = colorv + glm::vec4(ambient+diffuse+specular,1.0);
+		}
+		//fColor = fColor * texture2D(image,fTexCoord.st);
+	
+	//cout << "color: " << colorv.x << " " << colorv.y << " " << colorv.z << endl;
+	sf::Color colorr(colorv.x * 255,colorv.y * 255,colorv.z * 255,colorv.a * 255);
+	return colorr;
+
 }
 
 void Scenegraph::setFOV(float fieldOfView){

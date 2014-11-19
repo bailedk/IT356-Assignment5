@@ -1,6 +1,7 @@
 #ifndef SCENEGRAPH_H
 #define SCENEGRAPH_H
-
+#define GLM_SWIZZLE
+#include <glm/glm.hpp>
 #include <map>
 #include <stack>
 #include <vector>
@@ -91,6 +92,9 @@ private:
 	GLint objectColorLocation,modelviewLocation,normalMatrixLocation,numLightsLocation,mat_ambientLocation,
 		mat_diffuseLocation,mat_specularLocation,mat_shininessLocation,texturematrixLocation,textureLocation;
 	void getLights(stack<glm::mat4>& modelView);
+
+	sf::Color Scenegraph::shade(glm::vec4 pt, vector<Light>& lights, glm::vec4 normal, Material& mat);
+
 	LightLocation lightLocation[3];
 	float fov;
 	

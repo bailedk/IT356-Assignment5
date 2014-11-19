@@ -20,7 +20,7 @@
 				<rotate>45 1 0 0</rotate>
 				<scale>20 20 20</scale>					
 			</set>
-			<object instanceof="box">
+			<object instanceof="sphere">
 				<material>
 					<ambient>0 1 0</ambient>
 					<diffuse>1 0 0</diffuse>

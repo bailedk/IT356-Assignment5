@@ -12,7 +12,7 @@ private:
 public:
 	Light(void);
 	~Light(void);
-
+	
 	void setAmbient(float r,float g,float b);
 	void setDiffuse(float r,float g,float b);
 	void setSpecular(float r,float g,float b);
