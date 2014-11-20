@@ -55,6 +55,7 @@ public:
     void initialize();
     void draw();
     void openFile(string filename);
+	void setRayTraceImage(bool val){raytraceImg = val;};
 
     void mousepress(int x,int y);
     void mousemove(int x,int y);

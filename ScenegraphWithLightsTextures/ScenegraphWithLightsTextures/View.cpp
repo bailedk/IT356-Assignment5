@@ -23,7 +23,7 @@ View::View()
 	camNum = 0;
 	zoom = 0.0;
 	turn = 0.0;
-	raytraceImg = true;
+	//raytraceImg = true;
 }
 
 View::~View()
@@ -164,6 +164,7 @@ void View::draw()
 	if(raytraceImg) {
 		cout << "raytrace" << endl;
 		sgraph.raytrace(400,400, modelview);
+		cout<<"raytrace done"<<endl;
 		raytraceImg = false;
 	}
 

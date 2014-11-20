@@ -167,6 +167,15 @@ public:
 		glm::vec4 start = ray.getStart();
 
 		if(instanceOf->getName().compare("sphere") ==0) {
+			/*
+			float dx = dir.x-start.x;
+			float dy = dir.y-start.y;
+			float dz = dir.z-start.z;
+			glm::vec4 cVec = modelView.top()*glm::vec4(0,0,0,1);
+			float a = dx * dx + dy * dy + dz *dz;
+			float b = 2*dx*(start.x-cVec.x)+2*dy*(start.y-cVec.y)+2*dz*(start.z-cVec.z);
+			float c = cVec.x*cVec.x+cVec.y*cVec.y+cVec.z*cVec.z+start.x*start.x+start.y*start.y+start.z*start.z-(2*(cVec.x*start.x+cVec.y*start.y+cVec.z*start.z)) - 1.0f;
+			*/
 			float a = dir.x * dir.x + dir.y * dir.y + dir.z *dir.z;
 			float b = (2*dir.x*start.x)+(2*dir.y*start.y)+(2*dir.z*start.z);
 			float c = start.x*start.x+start.y*start.y+start.z*start.z-1.0f;
@@ -180,15 +189,18 @@ public:
 				if(tPos > 0 && tPos < tNeg) {
 					hit.setT(tPos);
 					hit.setMat(material);
-					hit.setNormal(modelView.top() * (start + (float)tPos*dir)); 
-					hit.setIntersection(start + (float)tPos*dir);
+					glm::mat4 normalMatrix= glm::transpose(glm::inverse(modelView.top()));
+					hit.setNormal(normalMatrix * ((start +tPos*dir)-(glm::vec4(0,0,0,1)))); 
+					hit.setIntersection(start + tPos*dir);
+				}
 				// not sure this is right
-				}else if(tNeg > 0 && tNeg < tPos) {
+				if(tNeg > 0 && tNeg < tPos) {
 					//if(tNeg<hit.getT()){
 						hit.setT(tNeg);
 						hit.setMat(material);
-						hit.setNormal(modelView.top() * (start + (float)tNeg*dir)); 
-						hit.setIntersection(start + (float)tNeg*dir);
+						glm::mat4 normalMatrix= glm::transpose(glm::inverse(modelView.top()));
+						hit.setNormal(normalMatrix * ((start +tNeg*dir)-(glm::vec4(0,0,0,1))));
+						hit.setIntersection(start + tNeg*dir);
 					//}
 				}
 				

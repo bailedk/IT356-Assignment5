@@ -115,6 +115,10 @@ void processEvent(sf::Event event,sf::RenderWindow& window)
 			cout << "Pressed 1" << endl;
 			v.camNum = 0;
 			break;
+		case sf::Keyboard::Num3:
+			cout << "Pressed 3" << endl;
+			v.setRayTraceImage(true);
+			break;
 		case sf::Keyboard::Num2: 
 			cout << "Pressed 2" << endl;
 			v.camNum = 1;
