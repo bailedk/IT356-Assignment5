@@ -176,24 +176,29 @@ public:
 			} else {
 				float tPos = (-b+sqrt(iTest))/(2*a);
 				float tNeg = (-b-sqrt(iTest))/(2*a);
-				// SETTING NORMALS/POINTS 
-				if(tPos >= 0 && tPos < tNeg && tPos < hit.getT()){
+				//if(tPos >= 0 && tPos < tNeg && tPos < hit.getT()){
+				if(tPos > 0 && tPos < tNeg) {
 					hit.setT(tPos);
+					hit.setMat(material);
+					hit.setNormal(modelView.top() * (start + (float)tPos*dir)); 
+					hit.setIntersection(start + (float)tPos*dir);
 				// not sure this is right
-				}else {
-					if(tNeg<hit.getT()){
+				}else if(tNeg > 0 && tNeg < tPos) {
+					//if(tNeg<hit.getT()){
 						hit.setT(tNeg);
-					}
+						hit.setMat(material);
+						hit.setNormal(modelView.top() * (start + (float)tNeg*dir)); 
+						hit.setIntersection(start + (float)tNeg*dir);
+					//}
 				}
 				
-				hit.setMat(material);
 				return true;
 			}
 		}
 		// Need to add hit record stuff
 		else if(instanceOf->getName().compare("box") == 0) {
 			float tNear = FLT_MAX * -1;
-			float tFar = FLT_MAX;
+ 			float tFar = FLT_MAX;
 
 			hit.setMat(material);
 

@@ -192,6 +192,8 @@ vector<vector<float>> Scenegraph::raytrace(int w, int h, stack<glm::mat4>& model
 	// don't think you really need to have this arr but whatevs
 	vector<vector<float>> arr;
 
+	getLights(modelView);
+
 	// Create the image
 	image.create(w,h);
 
@@ -353,34 +355,34 @@ sf::Color Scenegraph::shade(glm::vec4 pt, vector<Light>& lights, glm::vec4 norma
 	float nDotL,rDotV;
 
 	for (int i=0;i<lights.size();i++)
-		{
-			if (lights[i].getPosition().w != 0)
-				lightVec = glm::normalize(lights[i].getPosition().xyz()  - pt.xyz());
-			else
-				lightVec = glm::normalize(-lights[i].getPosition().xyz());
+	{
+		if (lights[i].getPosition().w != 0)
+			lightVec = glm::normalize(lights[i].getPosition().xyz()  - pt.xyz());
+		else
+			lightVec = glm::normalize(-lights[i].getPosition().xyz());
 
-			glm::vec3 tNormal = normal.xyz();
-			normalView = glm::normalize(tNormal);
-			nDotL = glm::dot(normalView,lightVec);
+		glm::vec3 tNormal = normal.xyz();
+		normalView = glm::normalize(tNormal);
+		nDotL = glm::dot(normalView,lightVec);
 
-			viewVec = -pt.xyz();
-			viewVec = glm::normalize(viewVec);
+		viewVec = -pt.xyz();
+		viewVec = glm::normalize(viewVec);
 
-			reflectVec = glm::reflect(-lightVec,normalView);
-			reflectVec = glm::normalize(reflectVec);
+		reflectVec = glm::reflect(-lightVec,normalView);
+		reflectVec = glm::normalize(reflectVec);
 
-			rDotV = glm::max(glm::dot(reflectVec,viewVec),0.0f);
+		rDotV = glm::max(glm::dot(reflectVec,viewVec),0.0f);
 
-			ambient = mat.getAmbient().xyz() * lights[i].getAmbient().xyz();
+		ambient = mat.getAmbient().xyz() * lights[i].getAmbient().xyz();
 
-			diffuse = mat.getDiffuse().xyz() * lights[i].getDiffuse().xyz() * glm::max(nDotL,0.0f);
+		diffuse = mat.getDiffuse().xyz() * lights[i].getDiffuse().xyz() * glm::max(nDotL,0.0f);
 
-			if (nDotL>0)
-				specular = mat.getSpecular().xyz() * lights[i].getSpecular().xyz() * glm::pow(rDotV,mat.getShininess());
-			else
-				specular = glm::vec3(0,0,0);
-			colorv = colorv + glm::vec4(ambient+diffuse+specular,1.0);
-		}
+		if (nDotL>0)
+			specular = mat.getSpecular().xyz() * lights[i].getSpecular().xyz() * glm::pow(rDotV,mat.getShininess());
+		else
+			specular = glm::vec3(0,0,0);
+		colorv = colorv + glm::vec4(ambient+diffuse+specular,1.0);
+	}
 		//fColor = fColor * texture2D(image,fTexCoord.st);
 	
 	//cout << "color: " << colorv.x << " " << colorv.y << " " << colorv.z << endl;
