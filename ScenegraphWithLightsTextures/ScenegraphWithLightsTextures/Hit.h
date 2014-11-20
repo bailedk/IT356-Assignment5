@@ -45,6 +45,9 @@ public:
 	void setNormal(glm::vec4 normalIn) {
 		normal = normalIn;
 	}
+	glm::vec4 getIntersection() {
+		return intersect;
+	}
 	Material getMat(){
 		return mat;
 	}

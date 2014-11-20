@@ -144,6 +144,7 @@ void Scenegraph::draw(stack<glm::mat4>& modelView)
 
 void Scenegraph::animate(float time)
 {
+	/*
 	time = time*8;
 	if(cabin != NULL) {
                cabin->setAnimationTransform(glm::translate(glm::mat4(1.0),glm::vec3(140,75,0)) * glm::rotate(glm::mat4(1.0),cos(time),glm::vec3(0,0,1)) * glm::translate(glm::mat4(1.0),glm::vec3(-100,-75,0)));
@@ -181,6 +182,7 @@ void Scenegraph::animate(float time)
 	if(spinner!=NULL){
 		spinner->setAnimationTransform(glm::rotate(glm::mat4(1.0f),time*8,glm::vec3(0,1,0)));
 	}
+	*/
 }
 
 void Scenegraph::getLights(stack<glm::mat4>& modelView){
@@ -208,6 +210,10 @@ vector<vector<float>> Scenegraph::raytrace(int w, int h, stack<glm::mat4>& model
 	for(int i = 0; i<h;i++){
 		for(int j = 0; j<w; j++){
 			
+			if(i == h/2 && j == w/2) {
+				cout << "midpoint" << endl;
+			}
+
 			Ray ray;
 			ray.setStart(glm::vec4(0,0,0,1));
 			//ray.setDirection(glm::normalize(glm::vec4((j-h/2),(h/2-i),-focalLength,0)));
@@ -284,16 +290,33 @@ sf::Color Scenegraph::shade(glm::vec4 pt, vector<Light>& lights, glm::vec4 norma
 
 		diffuse = mat.getDiffuse().xyz() * lights[i].getDiffuse().xyz() * glm::max(nDotL,0.0f);
 
-		if (nDotL>0)
+		if (nDotL>0) {
 			specular = mat.getSpecular().xyz() * lights[i].getSpecular().xyz() * glm::pow(rDotV,mat.getShininess());
-		else
+		}
+		else {
 			specular = glm::vec3(0,0,0);
-		colorv = colorv + glm::vec4(ambient+diffuse+specular,1.0);
+		}
+		//colorv = colorv + glm::vec4(ambient+diffuse+specular,1.0);
+		//cout << "specular " << specular.x << " " << specular.y << " " << specular.z << " " << endl; 
+		colorv = colorv + glm::vec4(ambient+diffuse+diffuse,1.0);
 	}
 		//fColor = fColor * texture2D(image,fTexCoord.st);
 	
 	//cout << "color: " << colorv.x << " " << colorv.y << " " << colorv.z << endl;
-	sf::Color colorr(colorv.x * 255,colorv.y * 255,colorv.z * 255,colorv.a * 255);
+
+	int r = colorv.x* 255;
+	int g = colorv.y* 255;
+	int b = colorv.z* 255;
+	int a = colorv.a* 255;
+	
+	if(r > 255)
+		r = 255;
+	if(g > 255)
+		g = 255;
+	if(b > 255) 
+		b = 255;
+	
+	sf::Color colorr(r,g,b,a);
 	return colorr;
 
 }

@@ -157,10 +157,8 @@ public:
 		//cout << "intersect in leaf" << endl;
 		bool hasHit = false;
 
-		//ray.setDirection(ray.getDirection()*glm::inverse(modelView.top()));
 		ray.setDirection(glm::inverse(modelView.top()) * ray.getDirection());
 
-		//ray.setStart(ray.getStart()*glm::inverse(modelView.top()));
 		ray.setStart(glm::inverse(modelView.top())*ray.getStart());
 
 		glm::vec4 dir = ray.getDirection();
@@ -190,19 +188,26 @@ public:
 					hit.setT(tPos);
 					hit.setMat(material);
 					glm::mat4 normalMatrix= glm::transpose(glm::inverse(modelView.top()));
-					hit.setNormal(normalMatrix * ((start +tPos*dir)-(glm::vec4(0,0,0,1)))); 
+					glm::vec4 norm = glm::vec4((start +tPos*dir).x, (start +tPos*dir).y, (start +tPos*dir).z, 0.0f); 
+					hit.setNormal(normalMatrix * norm); 
 					hit.setIntersection(start + tPos*dir);
 				}
 				// not sure this is right
 				if(tNeg > 0 && tNeg < tPos) {
 					//if(tNeg<hit.getT()){
+						// 1 at the end is point
+						// 0 is a vector
 						hit.setT(tNeg);
 						hit.setMat(material);
 						glm::mat4 normalMatrix= glm::transpose(glm::inverse(modelView.top()));
-						hit.setNormal(normalMatrix * ((start +tNeg*dir)-(glm::vec4(0,0,0,1))));
+						glm::vec4 norm2 = glm::vec4((start +tNeg*dir).x, (start +tNeg*dir).y, (start +tNeg*dir).z, 0.0f); 
 						hit.setIntersection(start + tNeg*dir);
+						hit.setNormal(normalMatrix * norm2);
 					//}
 				}
+
+				glm::vec4 test = hit.getIntersection();
+				cout << "intersection " << test.x << " " << test.y << " " << test.z << endl;
 				
 				return true;
 			}
