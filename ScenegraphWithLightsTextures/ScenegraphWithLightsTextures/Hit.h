@@ -28,7 +28,7 @@ public:
 	float t;
 
     Hit() {
-
+		t = -FLT_MAX*-1;
     }
 
     ~Hit()

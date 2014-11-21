@@ -177,12 +177,15 @@ public:
 				if(tPos>0&&tPos<tNeg){
 					t = tPos;
 				}
-				hit.setT(t);
-				hit.setMat(material);
-				glm::mat4 normalMatrix= glm::transpose(glm::inverse(modelView.top()));
-				glm::vec4 norm = glm::vec4((start.x +(t*dir.x)), (start.y +(t*dir.y)), (start.z +(t*dir.z)), 0.0f);
-				hit.setNormal(normalMatrix * glm::vec4(norm.x,norm.y,norm.z,0.0f)); 
-				hit.setIntersection(modelView.top() * glm::vec4(norm.x,norm.y,norm.z,1.0f));
+				if(hit.getT()>t||hit.getT()<0){
+					hit.setT(t);
+					hit.setMat(material);
+					glm::mat4 normalMatrix= glm::transpose(glm::inverse(modelView.top()));
+					glm::vec4 norm = glm::vec4((start.x +(t*dir.x)), (start.y +(t*dir.y)), (start.z +(t*dir.z)), 0.0f);
+					hit.setNormal(normalMatrix * glm::vec4(norm.x,norm.y,norm.z,0.0f)); 
+					hit.setIntersection(modelView.top() * glm::vec4(norm.x,norm.y,norm.z,1.0f)); 
+				}
+
 				
 				return true;
 			}
