@@ -159,8 +159,8 @@ public:
 
 		glm::vec4 dir = glm::inverse(modelView.top())*ray.getDirection();
 		glm::vec4 start = glm::inverse(modelView.top())*ray.getStart();
-		ray.setDirection(dir);
-		ray.setStart(start);
+		//ray.setDirection(dir);
+		//ray.setStart(start);
 
 		if(instanceOf->getName().compare("sphere") ==0) {
 			float a = dir.x * dir.x + dir.y * dir.y + dir.z *dir.z;
@@ -203,7 +203,7 @@ public:
 			// Uses Kay and Kayjia "Slab" Method found below
 			// https://www.siggraph.org/education/materials/HyperGraph/raytrace/rtinter3.htm
 
-			cout << "dir.x " << dir.x << endl;
+			//cout << "dir.x " << dir.x << endl;
 
 			// x
 			if (dir.x != 0.0) {
@@ -273,8 +273,9 @@ public:
  
 			// i think there needs to be an extra check here, but won't be able to be sure until shade works
 			if(tFar >= tNear && tFar >=0) {
-				hit.setIntersection(start + tFar*glm::vec4(dir.x,dir.y,dir.z,0.0f));
-				hit.setNormal(modelView.top() * hit.getIntersection());
+				hit.setIntersection(modelView.top()*(start + tFar*glm::vec4(dir.x,dir.y,dir.z,0.0f)));
+				glm::mat4 normalMatrix= glm::transpose(glm::inverse(modelView.top()));
+				hit.setNormal(normalMatrix * (start + tFar*glm::vec4(dir.x,dir.y,dir.z,0.0f)));
 				hit.setT(tFar);
 				hit.setMat(material);
 			}
