@@ -206,7 +206,7 @@ vector<vector<float>> Scenegraph::raytrace(int w, int h, stack<glm::mat4>& model
 
 	cout << "fov " << fov << endl;
 	cout << "fieldofview " << focalLength << endl;
-
+	int count = 0;
 	for(int i = 0; i<h;i++){
 		for(int j = 0; j<w; j++){
 			
@@ -220,6 +220,7 @@ vector<vector<float>> Scenegraph::raytrace(int w, int h, stack<glm::mat4>& model
 
 			if(raycast(ray, modelView, color)) {
 				image.setPixel(j,i,color);
+				count++;
 				//cout << "white" << endl;
 			}
 			else {
@@ -228,6 +229,8 @@ vector<vector<float>> Scenegraph::raytrace(int w, int h, stack<glm::mat4>& model
 			}
 		}
 	}
+
+	cout << "count" << count << endl;
 
 	image.saveToFile("raytrace.png");
 

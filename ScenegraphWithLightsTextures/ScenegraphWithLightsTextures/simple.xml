@@ -14,10 +14,11 @@
 		<spotangle>90</spotangle>
 		<spotdirection>1 0 0 </spotdirection>
 	</light> 
+
 	<transform>
 			<set>		
 			</set>
-			<object instanceof="sphere">
+			<object instanceof="box">
 				<material>
 					<ambient>1 0 0</ambient>
 					<diffuse>0 0 0</diffuse>

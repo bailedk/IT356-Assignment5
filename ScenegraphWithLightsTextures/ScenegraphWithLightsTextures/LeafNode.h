@@ -159,6 +159,9 @@ public:
 
 		glm::vec4 dir = glm::inverse(modelView.top())*ray.getDirection();
 		glm::vec4 start = glm::inverse(modelView.top())*ray.getStart();
+		ray.setDirection(dir);
+		ray.setStart(start);
+
 		if(instanceOf->getName().compare("sphere") ==0) {
 			float a = dir.x * dir.x + dir.y * dir.y + dir.z *dir.z;
 			float b = (2*dir.x*start.x)+(2*dir.y*start.y)+(2*dir.z*start.z);
@@ -200,10 +203,12 @@ public:
 			// Uses Kay and Kayjia "Slab" Method found below
 			// https://www.siggraph.org/education/materials/HyperGraph/raytrace/rtinter3.htm
 
+			cout << "dir.x " << dir.x << endl;
+
 			// x
 			if (dir.x != 0.0) {
-				float tx1 = (-0.5 - start.x)/dir.x;
-				float tx2 = (0.5 - start.x)/dir.x;
+				float tx1 = (-0.501 - start.x)/dir.x;
+				float tx2 = (0.501 - start.x)/dir.x;
  
 				if(tx1 > tx2) {
 					float temp;
@@ -224,8 +229,8 @@ public:
  
 			// y
 			if (dir.y != 0.0) {
-				float ty1 = (-0.5 - start.y)/dir.y;
-				float ty2 = (0.5 - start.y)/dir.y;
+				float ty1 = (-0.501 - start.y)/dir.y;
+				float ty2 = (0.501 - start.y)/dir.y;
 
 				if(ty1 > ty2) {
 					float temp;
@@ -246,8 +251,8 @@ public:
 
 			// z
 			if (dir.z != 0.0) {
-				float tz1 = (-0.5 - start.z)/dir.z;
-				float tz2 = (0.5 - start.z)/dir.z;
+				float tz1 = (-0.501 - start.z)/dir.z;
+				float tz2 = (0.501 - start.z)/dir.z;
 
 				if(tz1 > tz2) {
 					float temp;
@@ -267,14 +272,17 @@ public:
 			}
  
 			// i think there needs to be an extra check here, but won't be able to be sure until shade works
-			if(tFar >= tNear) {
+			if(tFar >= tNear && tFar >=0) {
+				hit.setIntersection(start + tFar*glm::vec4(dir.x,dir.y,dir.z,0.0f));
+				hit.setNormal(modelView.top() * hit.getIntersection());
 				hit.setT(tFar);
+				hit.setMat(material);
 			}
 			else {
-				hit.setT(tNear);
+				//hit.setT(tNear);
 			}
 
-			return tFar >= tNear;
+			return tFar >= tNear && tFar >= 0;
 
 		}
 
