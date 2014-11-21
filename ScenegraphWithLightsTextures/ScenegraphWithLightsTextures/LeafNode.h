@@ -157,23 +157,9 @@ public:
 		//cout << "intersect in leaf" << endl;
 		bool hasHit = false;
 
-		ray.setDirection(glm::inverse(modelView.top()) * ray.getDirection());
-
-		ray.setStart(glm::inverse(modelView.top())*ray.getStart());
-
-		glm::vec4 dir = ray.getDirection();
-		glm::vec4 start = ray.getStart();
-
+		glm::vec4 dir = glm::inverse(modelView.top())*ray.getDirection();
+		glm::vec4 start = glm::inverse(modelView.top())*ray.getStart();
 		if(instanceOf->getName().compare("sphere") ==0) {
-			/*
-			float dx = dir.x-start.x;
-			float dy = dir.y-start.y;
-			float dz = dir.z-start.z;
-			glm::vec4 cVec = modelView.top()*glm::vec4(0,0,0,1);
-			float a = dx * dx + dy * dy + dz *dz;
-			float b = 2*dx*(start.x-cVec.x)+2*dy*(start.y-cVec.y)+2*dz*(start.z-cVec.z);
-			float c = cVec.x*cVec.x+cVec.y*cVec.y+cVec.z*cVec.z+start.x*start.x+start.y*start.y+start.z*start.z-(2*(cVec.x*start.x+cVec.y*start.y+cVec.z*start.z)) - 1.0f;
-			*/
 			float a = dir.x * dir.x + dir.y * dir.y + dir.z *dir.z;
 			float b = (2*dir.x*start.x)+(2*dir.y*start.y)+(2*dir.z*start.z);
 			float c = start.x*start.x+start.y*start.y+start.z*start.z-1.0f;
@@ -181,33 +167,24 @@ public:
 			if(iTest<0) {
 				return false;
 			} else {
-				float tPos = (-b+sqrt(iTest))/(2*a);
-				float tNeg = (-b-sqrt(iTest))/(2*a);
-				//if(tPos >= 0 && tPos < tNeg && tPos < hit.getT()){
-				if(tPos > 0 && tPos < tNeg) {
-					hit.setT(tPos);
-					hit.setMat(material);
-					glm::mat4 normalMatrix= glm::transpose(glm::inverse(modelView.top()));
-					glm::vec4 norm = glm::vec4((start +tPos*dir).x, (start +tPos*dir).y, (start +tPos*dir).z, 0.0f); 
-					hit.setNormal(normalMatrix * norm); 
-					hit.setIntersection(start + tPos*dir);
-				}
-				// not sure this is right
-				if(tNeg > 0 && tNeg < tPos) {
-					//if(tNeg<hit.getT()){
-						// 1 at the end is point
-						// 0 is a vector
-						hit.setT(tNeg);
-						hit.setMat(material);
-						glm::mat4 normalMatrix= glm::transpose(glm::inverse(modelView.top()));
-						glm::vec4 norm2 = glm::vec4((start +tNeg*dir).x, (start +tNeg*dir).y, (start +tNeg*dir).z, 0.0f); 
-						hit.setIntersection(start + tNeg*dir);
-						hit.setNormal(normalMatrix * norm2);
-					//}
-				}
+				float tPos = (-1.0f*b+sqrt(iTest))/(2*a);
+				float tNeg = (-1.0f*b-sqrt(iTest))/(2*a);
 
+				float t = tNeg;
+				if(tNeg<0){
+					t = tPos;
+				}
+				if(tPos>0&&tPos<tNeg){
+					t = tPos;
+				}
+				hit.setT(t);
+				hit.setMat(material);
+				glm::mat4 normalMatrix= glm::transpose(glm::inverse(modelView.top()));
+				glm::vec4 norm = glm::vec4((start.x +(t*dir.x)), (start.y +(t*dir.y)), (start.z +(t*dir.z)), 0.0f);
+				hit.setNormal( normalMatrix * glm::vec4(norm.x,norm.y,norm.z,0.0f)); 
+				hit.setIntersection(modelView.top() * glm::vec4(norm.x,norm.y,norm.z,1.0f));
+				
 				glm::vec4 test = hit.getIntersection();
-				cout << "intersection " << test.x << " " << test.y << " " << test.z << endl;
 				
 				return true;
 			}
