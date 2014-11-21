@@ -216,8 +216,7 @@ vector<vector<float>> Scenegraph::raytrace(int w, int h, stack<glm::mat4>& model
 
 			Ray ray;
 			ray.setStart(glm::vec4(0,0,0,1));
-			//ray.setDirection(glm::normalize(glm::vec4((j-h/2),(h/2-i),-focalLength,0)));
-			ray.setDirection(glm::normalize(glm::vec4((j-w/2),(h/2-i),-focalLength,0)));
+			ray.setDirection(glm::vec4((j-w/2),(h/2-i),-focalLength,0));
 
 			if(raycast(ray, modelView, color)) {
 				image.setPixel(j,i,color);
@@ -298,7 +297,7 @@ sf::Color Scenegraph::shade(glm::vec4 pt, vector<Light>& lights, glm::vec4 norma
 		}
 		//colorv = colorv + glm::vec4(ambient+diffuse+specular,1.0);
 		//cout << "specular " << specular.x << " " << specular.y << " " << specular.z << " " << endl; 
-		colorv = colorv + glm::vec4(ambient+diffuse+diffuse,1.0);
+		colorv = colorv + glm::vec4(ambient+diffuse+specular,1.0);
 	}
 		//fColor = fColor * texture2D(image,fTexCoord.st);
 	

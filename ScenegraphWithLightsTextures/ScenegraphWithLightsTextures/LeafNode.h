@@ -181,10 +181,8 @@ public:
 				hit.setMat(material);
 				glm::mat4 normalMatrix= glm::transpose(glm::inverse(modelView.top()));
 				glm::vec4 norm = glm::vec4((start.x +(t*dir.x)), (start.y +(t*dir.y)), (start.z +(t*dir.z)), 0.0f);
-				hit.setNormal( normalMatrix * glm::vec4(norm.x,norm.y,norm.z,0.0f)); 
+				hit.setNormal(normalMatrix * glm::vec4(norm.x,norm.y,norm.z,0.0f)); 
 				hit.setIntersection(modelView.top() * glm::vec4(norm.x,norm.y,norm.z,1.0f));
-				
-				glm::vec4 test = hit.getIntersection();
 				
 				return true;
 			}
