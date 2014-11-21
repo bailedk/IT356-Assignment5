@@ -4,6 +4,7 @@
 	<instance name="cylinder" path="models/cylinder" />
 	<instance name="cone" path="models/cone" />
 					
+	<group>
 	<light>
 		<ambient>0.8 0.8 0.8</ambient>
 		<diffuse>0.8 0.8 0.8</diffuse>
@@ -13,7 +14,6 @@
 		<spotangle>90</spotangle>
 		<spotdirection>1 0 0 </spotdirection>
 	</light> 
-	
 	<transform>
 			<set>		
 			</set>
@@ -34,5 +34,6 @@
 			</object>			
 							
 	</transform>
+</group>
 
 </scene>
