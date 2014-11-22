@@ -198,18 +198,28 @@ public:
 			float tNear = FLT_MAX * -1;
  			float tFar = FLT_MAX;
 
-			hit.setMat(material);
+
+
+			//hit.setMat(material);
 
 			// Uses Kay and Kayjia "Slab" Method found below
 			// https://www.siggraph.org/education/materials/HyperGraph/raytrace/rtinter3.htm
 
 			//cout << "dir.x " << dir.x << endl;
-
-			// x
+			
+	
 			if (dir.x != 0.0) {
-				float tx1 = (-0.501 - start.x)/dir.x;
-				float tx2 = (0.501 - start.x)/dir.x;
- 
+				float tx1;
+				float tx2;
+				if(dir.x>0){
+					tx1 = (-0.501 - start.x)/dir.x;
+					tx2 = (0.501 - start.x)/dir.x;
+				}else{
+					 tx2 = (-0.501 - start.x)/dir.x;
+					 tx1 = (0.501 - start.x)/dir.x;
+				}
+				
+
 				if(tx1 > tx2) {
 					float temp;
 					temp = tx1;
@@ -225,12 +235,23 @@ public:
 					tFar = tx2;
 				}
 
+			}else{
+				if(start.x>.5||start.x<-.5){
+					return false;
+				}
 			}
  
 			// y
 			if (dir.y != 0.0) {
-				float ty1 = (-0.501 - start.y)/dir.y;
-				float ty2 = (0.501 - start.y)/dir.y;
+				float ty1;
+				float ty2;
+				if(dir.y>0){
+					ty1 = (-0.501 - start.y)/dir.y;
+					ty2 = (0.501 - start.y)/dir.y;
+				}else{
+					ty2 = (-0.501 - start.y)/dir.y;
+					ty1 = (0.501 - start.y)/dir.y;
+				}
 
 				if(ty1 > ty2) {
 					float temp;
@@ -247,12 +268,23 @@ public:
 					tFar = ty2;
 				}
  
+			}else{
+				if(start.y>.5||start.y<-.5){
+					return false;
+				}
 			}
 
 			// z
 			if (dir.z != 0.0) {
-				float tz1 = (-0.501 - start.z)/dir.z;
-				float tz2 = (0.501 - start.z)/dir.z;
+				float tz1;
+				float tz2;
+				if(dir.y>0){
+					tz1 = (-0.501 - start.z)/dir.z;
+					tz2 = (0.501 - start.z)/dir.z;
+				}else{
+					tz2 = (-0.501 - start.z)/dir.z;
+					tz1 = (0.501 - start.z)/dir.z;
+				}
 
 				if(tz1 > tz2) {
 					float temp;
@@ -269,19 +301,28 @@ public:
 					tFar = tz2;
 				}
 
+			}else{
+				if(start.z>.5||start.z<-.5){
+					return false;
+				}
 			}
- 
+			float t;
 			// i think there needs to be an extra check here, but won't be able to be sure until shade works
+			
 			if(tFar >= tNear && tFar >=0) {
-				hit.setIntersection(modelView.top()*(start + tFar*glm::vec4(dir.x,dir.y,dir.z,0.0f)));
-				glm::mat4 normalMatrix= glm::transpose(glm::inverse(modelView.top()));
-				hit.setNormal(normalMatrix * (start + tFar*glm::vec4(dir.x,dir.y,dir.z,0.0f)));
-				hit.setT(tFar);
+				t=tNear;
+				hit.setT(t);
 				hit.setMat(material);
+				glm::mat4 normalMatrix= glm::transpose(glm::inverse(modelView.top()));
+				glm::vec4 norm = glm::vec4((start.x +(t*dir.x)), (start.y +(t*dir.y)), (start.z +(t*dir.z)), 0.0f);
+				hit.setNormal(normalMatrix * glm::vec4(norm.x,norm.y,norm.z,0.0f)); 
+				hit.setIntersection(modelView.top() * glm::vec4(norm.x,norm.y,norm.z,1.0f)); 
 			}
-			else {
-				//hit.setT(tNear);
+			else{
+				t=tNear;
 			}
+
+		
 
 			return tFar >= tNear && tFar >= 0;
 
