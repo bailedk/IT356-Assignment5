@@ -215,26 +215,12 @@ public:
 					tx1 = (-0.501 - start.x)/dir.x;
 					tx2 = (0.501 - start.x)/dir.x;
 				}else{
-					 tx2 = (-0.501 - start.x)/dir.x;
-					 tx1 = (0.501 - start.x)/dir.x;
+					 tx1 = (-0.501 - start.x)/dir.x;
+					 tx2 = (0.501 - start.x)/dir.x;
+					// tx1 = -1 * tx1;
 				}
-				
-
-				if(tx1 > tx2) {
-					float temp;
-					temp = tx1;
-					tx1 = tx2;
-					tx2 = temp;
-				}
-			
-				if(tx1 > tNear) {
-					tNear = tx1;
-				}
-
-				if(tx2 < tFar) {
-					tFar = tx2;
-				}
-
+				tNear = max(tNear, min(tx1,tx2));
+				tFar = min(tFar, max(tx1,tx2));
 			}else{
 				if(start.x>.5||start.x<-.5){
 					return false;
@@ -249,58 +235,33 @@ public:
 					ty1 = (-0.501 - start.y)/dir.y;
 					ty2 = (0.501 - start.y)/dir.y;
 				}else{
-					ty2 = (-0.501 - start.y)/dir.y;
-					ty1 = (0.501 - start.y)/dir.y;
+					ty1 = (-0.501 - start.y)/dir.y;
+					ty2 = (0.501 - start.y)/dir.y;
 				}
-
-				if(ty1 > ty2) {
-					float temp;
-					temp = ty1;
-					ty1 = ty2;
-					ty2 = temp;
-				}
-			
-				if(ty1 > tNear) {
-					tNear = ty1;
-				}
-
-				if(ty2 < tFar) {
-					tFar = ty2;
-				}
- 
+				
+				tNear = max(tNear, min(ty1,ty2));
+				tFar = min(tFar, max(ty1,ty2));
 			}else{
 				if(start.y>.5||start.y<-.5){
 					return false;
 				}
 			}
-
+			
 			// z
 			if (dir.z != 0.0) {
 				float tz1;
 				float tz2;
-				if(dir.y>0){
+				if(dir.z>0){
 					tz1 = (-0.501 - start.z)/dir.z;
 					tz2 = (0.501 - start.z)/dir.z;
 				}else{
-					tz2 = (-0.501 - start.z)/dir.z;
-					tz1 = (0.501 - start.z)/dir.z;
+					tz1 = (-0.501 - start.z)/dir.z;
+					tz2 = (0.501 - start.z)/dir.z;
+					
 				}
-
-				if(tz1 > tz2) {
-					float temp;
-					temp = tz1;
-					tz1 = tz1;
-					tz2 = temp;
-				}
-			
-				if(tz1 > tNear) {
-					tNear = tz1;
-				}
-
-				if(tz2 < tFar) {
-					tFar = tz2;
-				}
-
+				
+				tNear = max(tNear, min(tz1,tz2));
+				tFar = min(tFar, max(tz1,tz2));
 			}else{
 				if(start.z>.5||start.z<-.5){
 					return false;
@@ -315,7 +276,20 @@ public:
 				hit.setMat(material);
 				glm::mat4 normalMatrix= glm::transpose(glm::inverse(modelView.top()));
 				glm::vec4 norm = glm::vec4((start.x +(t*dir.x)), (start.y +(t*dir.y)), (start.z +(t*dir.z)), 0.0f);
-				hit.setNormal(normalMatrix * glm::vec4(norm.x,norm.y,norm.z,0.0f)); 
+				float eps = .005;
+				if(glm::abs(norm.x-.5)<eps)
+					hit.setNormal(glm::vec4(1,0,0,0));
+				else if(glm::abs(norm.x+.5)<eps)
+					hit.setNormal(glm::vec4(-1,0,0,0));
+				else if(glm::abs(norm.y-.5)<eps)
+					hit.setNormal(glm::vec4(0,1,0,0));
+				else if(glm::abs(norm.y+.5)<eps)
+					hit.setNormal(glm::vec4(0,-1,0,0));
+				else if(glm::abs(norm.z-.5)<eps)
+					hit.setNormal(glm::vec4(0,0,1,0));
+				else if(glm::abs(norm.z+.5)<eps)
+					hit.setNormal(glm::vec4(0,0,-1,0));
+				hit.setNormal(modelView.top() * hit.normal); 
 				hit.setIntersection(modelView.top() * glm::vec4(norm.x,norm.y,norm.z,1.0f)); 
 			}
 			else{
