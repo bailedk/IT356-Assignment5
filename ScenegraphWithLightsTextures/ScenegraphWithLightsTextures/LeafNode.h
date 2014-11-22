@@ -198,14 +198,9 @@ public:
 			float tNear = FLT_MAX * -1;
  			float tFar = FLT_MAX;
 
-
-
-			//hit.setMat(material);
-
 			// Uses Kay and Kayjia "Slab" Method found below
 			// https://www.siggraph.org/education/materials/HyperGraph/raytrace/rtinter3.htm
 
-			//cout << "dir.x " << dir.x << endl;
 			
 	
 			if (dir.x != 0.0) {
@@ -219,7 +214,8 @@ public:
 					 tx2 = (0.501 - start.x)/dir.x;
 					// tx1 = -1 * tx1;
 				}
-				tNear = max(tNear, min(tx1,tx2));
+				float tx = min(tx1,tx2);
+				tNear = max(tNear, tx);
 				tFar = min(tFar, max(tx1,tx2));
 			}else{
 				if(start.x>.5||start.x<-.5){
@@ -227,7 +223,7 @@ public:
 				}
 			}
  
-			// y
+			
 			if (dir.y != 0.0) {
 				float ty1;
 				float ty2;
@@ -238,8 +234,8 @@ public:
 					ty1 = (-0.501 - start.y)/dir.y;
 					ty2 = (0.501 - start.y)/dir.y;
 				}
-				
-				tNear = max(tNear, min(ty1,ty2));
+				float ty = min(ty1,ty2);
+				tNear = max(tNear, ty);
 				tFar = min(tFar, max(ty1,ty2));
 			}else{
 				if(start.y>.5||start.y<-.5){
@@ -259,8 +255,8 @@ public:
 					tz2 = (0.501 - start.z)/dir.z;
 					
 				}
-				
-				tNear = max(tNear, min(tz1,tz2));
+				float tz = min(tz1,tz2);
+				tNear = max(tNear,tz);
 				tFar = min(tFar, max(tz1,tz2));
 			}else{
 				if(start.z>.5||start.z<-.5){
@@ -272,33 +268,30 @@ public:
 			
 			if(tFar >= tNear && tFar >=0) {
 				t=tNear;
-				hit.setT(t);
-				hit.setMat(material);
-				glm::vec4 norm = glm::vec4((start.x +(t*dir.x)), (start.y +(t*dir.y)), (start.z +(t*dir.z)), 0.0f);
-				float eps = .005;
-				if(glm::abs(norm.x-.5)<eps)
-					hit.setNormal(glm::vec4(1,0,0,0));
-				else if(glm::abs(norm.x+.5)<eps)
-					hit.setNormal(glm::vec4(-1,0,0,0));
-				else if(glm::abs(norm.y-.5)<eps)
-					hit.setNormal(glm::vec4(0,1,0,0));
-				else if(glm::abs(norm.y+.5)<eps)
-					hit.setNormal(glm::vec4(0,-1,0,0));
-				else if(glm::abs(norm.z-.5)<eps)
-					hit.setNormal(glm::vec4(0,0,1,0));
-				else if(glm::abs(norm.z+.5)<eps)
-					hit.setNormal(glm::vec4(0,0,-1,0));
-				hit.setNormal(modelView.top() * hit.normal); 
-				hit.setIntersection(modelView.top() * glm::vec4(norm.x,norm.y,norm.z,1.0f)); 
+				if(hit.getT()>t||hit.getT()<0){
+					hit.setT(t);
+					hit.setMat(material);
+					glm::vec4 norm = glm::vec4((start.x +(t*dir.x)), (start.y +(t*dir.y)), (start.z +(t*dir.z)), 0.0f);
+					if(glm::abs(norm.x-.5)<.005)
+						hit.setNormal(modelView.top()*glm::vec4(1,0,0,0));
+					else if(glm::abs(norm.x+.5)<.005)
+						hit.setNormal(modelView.top()*glm::vec4(-1,0,0,0));
+					else if(glm::abs(norm.y-.5)<.005)
+						hit.setNormal(modelView.top()*glm::vec4(0,1,0,0));
+					else if(glm::abs(norm.y+.5)<.005)
+						hit.setNormal(modelView.top()*glm::vec4(0,-1,0,0));
+					else if(glm::abs(norm.z-.5)<.005)
+						hit.setNormal(modelView.top()*glm::vec4(0,0,1,0));
+					else if(glm::abs(norm.z+.5)<.005)
+						hit.setNormal(modelView.top()*glm::vec4(0,0,-1,0));
+					hit.setIntersection(modelView.top() * glm::vec4(norm.x,norm.y,norm.z,1.0f));
+					return true;
+				}
 			}
 			else{
-				t=tNear;
+				return false;
 			}
-
-		
-
-			return tFar >= tNear && tFar >= 0;
-
+			
 		}
 
 		// if it's not an object we have just give a no-hit
