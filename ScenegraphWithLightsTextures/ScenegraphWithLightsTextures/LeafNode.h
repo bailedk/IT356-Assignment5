@@ -274,7 +274,6 @@ public:
 				t=tNear;
 				hit.setT(t);
 				hit.setMat(material);
-				glm::mat4 normalMatrix= glm::transpose(glm::inverse(modelView.top()));
 				glm::vec4 norm = glm::vec4((start.x +(t*dir.x)), (start.y +(t*dir.y)), (start.z +(t*dir.z)), 0.0f);
 				float eps = .005;
 				if(glm::abs(norm.x-.5)<eps)
